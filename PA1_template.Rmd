@@ -1,5 +1,6 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
+author: Johannes Marais
 output: 
   html_document:
     keep_md: true
@@ -8,11 +9,24 @@ output:
 
 ## Loading and preprocessing the data
 
+The following code will set the working directory and load the data into a dataframe called activityData. The dataframe is then converted to a dplyr dataframe as that would make grouping the data easier for the next questions. When loading the data, only the collumn classes are changed as the Date is loaded as a factor by default and not a date. The NA values are kept as placeholder as they will be supstitituted in a later section.
 
+```{r echo=TRUE,message=FALSE}
+library(dplyr) #Load the dplyr library
+setwd("~/Documents/Coursera/Specialization/05 Reproducable Research/Assignment/Assignment 1/RepData_PeerAssessment1") #Set the working directory to the location of the file
+activityData<-read.csv("activity.csv",colClasses = c("integer","Date","integer")) #Load the data
+activityData<-tbl_df(activityData) #Convert the data to a dplyr tbl class
+str(activityData) #Display the data
+```
 
 ## What is mean total number of steps taken per day?
 
-
+```{r echo=TRUE}
+library(ggplot2) #Load the ggplot2 library
+dailySum<- activityData %>% group_by(date) %>%summarise(dailysum=sum(steps,na.rm=TRUE))
+hist(dailySum$dailysum)
+qplot(dailySum$dailysum,geom='histogram')
+```
 
 ## What is the average daily activity pattern?
 
